@@ -30,7 +30,7 @@ class TextToSpeechApp:
         self.speed_label.pack(side=tk.LEFT)
         button_frame = ttk.Frame(root)
         button_frame.pack(pady=5)
-        self.generate_button = ttk.Button(button_frame, text="Generate", command=self.generate_audio)
+        self.generate_button = ttk.Button(button_frame, text="Generate", command=self.generate_app_audio)
         self.generate_button.pack(side=tk.LEFT, padx=5)
         self.play_button = ttk.Button(button_frame, text="Play", command=self.toggle_play_pause, state=tk.DISABLED)
         self.play_button.pack(side=tk.LEFT, padx=5)
@@ -45,6 +45,7 @@ class TextToSpeechApp:
         self.hard_area_label = ttk.Label(root, text="The transcription processes each line separately.", foreground="gray")
         self.hard_area_label.pack(padx=10, pady=(0, 10))
         self.text_box.bind("<Control-a>", self.select_all)
+        self.is_paused = False
 
     def split_sentences(self, text):
         PARAGRAPH_PLACEHOLDER = "||PARAGRAPH||"
@@ -66,7 +67,7 @@ class TextToSpeechApp:
                 processed.append(el + "\n\n")
         return "".join(processed).strip()
 
-    def generate_audio(self):
+    def generate_app_audio(self):
         text = self.text_box.get("1.0", tk.END).strip()
         if not text:
             return
@@ -79,31 +80,41 @@ class TextToSpeechApp:
         self.save_button.config(state=tk.NORMAL)
         self.is_playing = False
         self.play_button.config(text="Play")
+        pygame.mixer.quit()
+        self.is_playing = False
+        self.play_button.config(text="Play")
+        self.is_paused = False
 
     def toggle_autosplit(self):
         pass
 
     def toggle_play_pause(self):
-        if not self.is_playing:
+        if not pygame.mixer.get_init():
             pygame.mixer.init()
-            pygame.mixer.music.load(self.audio_file.name)
-            pygame.mixer.music.play()
-            self.is_playing = True
-            self.play_button.config(text="Pause")
-            self.root.after(100, self.check_playback_status)
+        if self.is_playing:
+            pygame.mixer.music.pause()
+            self.is_playing = False
+            self.is_paused = True
+            self.play_button.config(text="Resume")
         else:
-            if pygame.mixer.music.get_busy():
-                pygame.mixer.music.pause()
-                self.play_button.config(text="Resume")
-            else:
+            if self.is_paused:
                 pygame.mixer.music.unpause()
-                self.play_button.config(text="Pause")
+                self.is_playing = True
+                self.is_paused = False
+                self.play_button.config(text="Stop")
+            else:
+                pygame.mixer.music.load(self.audio_file.name)
+                pygame.mixer.music.play()
+                self.is_playing = True
+                self.play_button.config(text="Stop")
+            self.root.after(100, self.check_playback_status)
 
     def check_playback_status(self):
         if pygame.mixer.music.get_busy():
             self.root.after(100, self.check_playback_status)
         else:
             self.is_playing = False
+            self.is_paused = False
             self.play_button.config(text="Play")
 
     def save_file(self):
