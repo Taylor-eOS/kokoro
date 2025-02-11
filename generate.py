@@ -7,8 +7,8 @@ VOICE = 'am_michael'
 #us male: am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_puck
 #us female: af_alloy, af_aoede, af_bella, af_heart, af_jessica, af_kore, af_nicole, af_nova, af_river, af_sarah, af_sky 	
 #british: bf_alice, bf_emma, bf_isabella, bf_lily, bm_daniel, bm_fable, bm_george, bm_lewis
-SPEED = 1.0
-SPLIT_PATTERN = r'\n+'
+SPEED = 1.1
+SPLIT_PATTERN = r'\n+' #The generation will process each line as a batch. Split your input accordingly.
 SAMPLE_RATE = 24000
 
 def generate_audio(text, speaker_voice=VOICE, voice_speed=SPEED):
