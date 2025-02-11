@@ -3,6 +3,8 @@ from tkinter import ttk, scrolledtext, filedialog
 import tempfile
 import pygame
 import shutil
+import pysbd
+import re
 from generate import generate_audio, save_audio
 
 class TextToSpeechApp:
@@ -11,6 +13,7 @@ class TextToSpeechApp:
         self.root.title("Text to Speech")
         self.audio_file = None
         self.is_playing = False
+        self.autosplit_var = tk.BooleanVar(value=False)
         self.voice_options = ['am_michael', 'af_sky', 'am_adam', 'am_echo', 'am_eric', 'am_liam', 'bm_george', 'bm_lewis', 'bm_daniel', 'am_onyx', 'af_heart', 'af_alloy', 'af_aoede', 'af_bella', 'af_jessica', 'af_sarah', 'bf_alice', 'af_nova', 'af_river', 'bf_isabella', 'bf_lily', 'bf_emma', 'af_kore', 'am_puck', 'bm_fable']
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
         self.voice_var = tk.StringVar(value='am_michael')
@@ -33,24 +36,52 @@ class TextToSpeechApp:
         self.play_button.pack(side=tk.LEFT, padx=5)
         self.save_button = ttk.Button(button_frame, text="Save", command=self.save_file, state=tk.DISABLED)
         self.save_button.pack(side=tk.LEFT, padx=5)
+        self.autosplit_check = ttk.Checkbutton(
+            button_frame, 
+            text="Automatic sentence splitting", 
+            variable=self.autosplit_var)
+        self.autosplit_check.pack(side=tk.LEFT, padx=10)
         self.text_box.pack(padx=10, pady=10)
         self.hard_area_label = ttk.Label(root, text="The transcription processes each line separately.", foreground="gray")
         self.hard_area_label.pack(padx=10, pady=(0, 10))
         self.text_box.bind("<Control-a>", self.select_all)
 
-    def select_all(self, event):
-        event.widget.tag_add("sel", "1.0", "end")
-        return "break"
+    def split_sentences(self, text):
+        PARAGRAPH_PLACEHOLDER = "||PARAGRAPH||"
+        paragraph_breaks = re.split(r'(\n{2,})', text)
+        segmenter = pysbd.Segmenter(language="en", clean=True)
+        elements = []
+        for part in paragraph_breaks:
+            if not part:
+                continue
+            if re.match(r'\n{2,}', part):
+                elements.append(PARAGRAPH_PLACEHOLDER)
+            else:
+                elements.extend(segmenter.segment(part.strip()))
+        processed = []
+        for el in elements:
+            if el == PARAGRAPH_PLACEHOLDER:
+                processed.append("\n\n")
+            else:
+                processed.append(el + "\n\n")
+        return "".join(processed).strip()
 
     def generate_audio(self):
         text = self.text_box.get("1.0", tk.END).strip()
         if not text:
             return
+        if self.autosplit_var.get():
+            text = self.split_sentences(text)
         self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
         combined_audio = generate_audio(text, speaker_voice=self.voice_var.get(), voice_speed=round(self.speed_var.get(), 2))
         save_audio(combined_audio, self.audio_file.name)
         self.play_button.config(state=tk.NORMAL)
         self.save_button.config(state=tk.NORMAL)
+        self.is_playing = False
+        self.play_button.config(text="Play")
+
+    def toggle_autosplit(self):
+        pass
 
     def toggle_play_pause(self):
         if not self.is_playing:
@@ -72,6 +103,10 @@ class TextToSpeechApp:
             file_path = filedialog.asksaveasfilename(defaultextension=".wav", filetypes=[("WAV files", "*.wav")])
             if file_path:
                 shutil.copyfile(self.audio_file.name, file_path)
+
+    def select_all(self, event):
+        event.widget.tag_add("sel", "1.0", "end")
+        return "break"
 
 root = tk.Tk()
 app = TextToSpeechApp(root)
