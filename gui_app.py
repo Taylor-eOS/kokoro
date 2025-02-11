@@ -90,6 +90,7 @@ class TextToSpeechApp:
             pygame.mixer.music.play()
             self.is_playing = True
             self.play_button.config(text="Pause")
+            self.root.after(100, self.check_playback_status)
         else:
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.pause()
@@ -97,6 +98,13 @@ class TextToSpeechApp:
             else:
                 pygame.mixer.music.unpause()
                 self.play_button.config(text="Pause")
+
+    def check_playback_status(self):
+        if pygame.mixer.music.get_busy():
+            self.root.after(100, self.check_playback_status)
+        else:
+            self.is_playing = False
+            self.play_button.config(text="Play")
 
     def save_file(self):
         if self.audio_file:
