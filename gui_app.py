@@ -11,13 +11,7 @@ class TextToSpeechApp:
         self.root.title("Text to Speech")
         self.audio_file = None
         self.is_playing = False
-        self.voice_options = [
-            'am_adam', 'am_echo', 'am_eric', 'am_liam', 'am_michael', 
-            'am_onyx', 'am_puck', 'af_sky', 'af_heart', 'af_alloy',
-            'af_aoede', 'af_bella', 'af_jessica', 'af_kore', 'af_nova',
-            'af_river', 'af_sarah', 'bf_alice', 'bf_emma', 'bf_isabella', 
-            'bf_lily', 'bm_george', 'bm_lewis', 'bm_daniel', 'bm_fable'
-        ]
+        self.voice_options = ['am_michael', 'af_sky', 'am_adam', 'am_echo', 'am_eric', 'am_liam', 'bm_george', 'bm_lewis', 'bm_daniel', 'am_onyx', 'af_heart', 'af_alloy', 'af_aoede', 'af_bella', 'af_jessica', 'af_sarah', 'bf_alice', 'af_nova', 'af_river', 'bf_isabella', 'bf_lily', 'bf_emma', 'af_kore', 'am_puck', 'bm_fable']
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
         self.voice_var = tk.StringVar(value='am_michael')
         self.speed_var = tk.DoubleVar(value=1.0)
@@ -40,6 +34,8 @@ class TextToSpeechApp:
         self.save_button = ttk.Button(button_frame, text="Save", command=self.save_file, state=tk.DISABLED)
         self.save_button.pack(side=tk.LEFT, padx=5)
         self.text_box.pack(padx=10, pady=10)
+        self.hard_area_label = ttk.Label(root, text="The transcription processes each line separately.", foreground="gray")
+        self.hard_area_label.pack(padx=10, pady=(0, 10))
         self.text_box.bind("<Control-a>", self.select_all)
 
     def select_all(self, event):
