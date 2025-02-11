@@ -2,7 +2,7 @@
 
 This project is a Python-based Text-to-Speech (TTS) application built using `tkinter` for the graphical user interface (GUI) and `pygame` for audio playback.
 The app allows users to input text, select a voice, adjust speech speed, and generate audio.
-It also includes features like automatic sentence splitting using `pysbd`, pause/resume functionality, and the ability to save generated audio files.
+It also includes features like automatic sentence splitting using `pysbd`, pause functionality, and the ability to save generated audio files.
 
 #### Setup Instructions:
 1. **Clone the Repository or download the files**:
@@ -31,6 +31,7 @@ It also includes features like automatic sentence splitting using `pysbd`, pause
    - Save the audio using the "Save" button.
 The script can't currently continue playback where it stopped, but restarts.
 The  text window has Ctrl+A for selecting all text keybound, but inserting seems to amend. So delete the old text first.
+This has not been tested on Windows.
 
 #### License:
 Do as you wish.
