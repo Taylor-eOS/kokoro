@@ -101,20 +101,19 @@ class TextToSpeechApp:
                 pygame.mixer.music.unpause()
                 self.is_playing = True
                 self.is_paused = False
-                self.play_button.config(text="Stop")
+                self.play_button.config(text="Pause")
             else:
                 pygame.mixer.music.load(self.audio_file.name)
                 pygame.mixer.music.play()
                 self.is_playing = True
-                self.play_button.config(text="Stop")
+                self.play_button.config(text="Pause")
             self.root.after(100, self.check_playback_status)
 
     def check_playback_status(self):
-        if pygame.mixer.music.get_busy():
+        if self.is_paused or pygame.mixer.music.get_busy():
             self.root.after(100, self.check_playback_status)
         else:
             self.is_playing = False
-            self.is_paused = False
             self.play_button.config(text="Play")
 
     def save_file(self):
