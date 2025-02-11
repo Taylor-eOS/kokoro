@@ -17,16 +17,13 @@ class TextToSpeechApp:
             'af_sarah', 'af_sky', 'bf_alice', 'bf_emma', 'bf_isabella', 
             'bf_lily', 'bm_daniel', 'bm_fable', 'bm_george', 'bm_lewis'
         ]
-        # Widgets
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
         self.voice_var = tk.StringVar(value='am_michael')
         self.speed_var = tk.DoubleVar(value=1.0)
-        # Layout
         control_frame = ttk.Frame(root)
         control_frame.pack(padx=10, pady=5, fill=tk.X)
         ttk.Label(control_frame, text="Voice:").pack(side=tk.LEFT)
-        self.voice_menu = ttk.Combobox(control_frame, textvariable=self.voice_var, 
-                                     values=self.voice_options, width=15)
+        self.voice_menu = ttk.Combobox(control_frame, textvariable=self.voice_var, values=self.voice_options, width=15, state="readonly")
         self.voice_menu.pack(side=tk.LEFT, padx=5)
         ttk.Label(control_frame, text="Speed:").pack(side=tk.LEFT, padx=(10,0))
         self.speed_slider = ttk.Scale(control_frame, from_=0.9, to=1.2, variable=self.speed_var, command=lambda _: self.speed_var.set(round(self.speed_var.get(), 2)))
@@ -48,11 +45,7 @@ class TextToSpeechApp:
         if not text:
             return
         self.audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-        combined_audio = generate_audio(
-            text,
-            speaker_voice=self.voice_var.get(),
-            voice_speed=round(self.speed_var.get(), 2)
-        )
+        combined_audio = generate_audio(text, speaker_voice=self.voice_var.get(), voice_speed=round(self.speed_var.get(), 2))
         save_audio(combined_audio, self.audio_file.name)
         self.play_button.config(state=tk.NORMAL)
         self.save_button.config(state=tk.NORMAL)
@@ -65,10 +58,7 @@ class TextToSpeechApp:
 
     def save_file(self):
         if self.audio_file:
-            file_path = filedialog.asksaveasfilename(
-                defaultextension=".wav",
-                filetypes=[("WAV files", "*.wav")]
-            )
+            file_path = filedialog.asksaveasfilename(defaultextension=".wav", filetypes=[("WAV files", "*.wav")])
             if file_path:
                 shutil.copyfile(self.audio_file.name, file_path)
 
