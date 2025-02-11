@@ -12,10 +12,10 @@ class TextToSpeechApp:
         self.audio_file = None
         self.voice_options = [
             'am_adam', 'am_echo', 'am_eric', 'am_liam', 'am_michael', 
-            'am_onyx', 'am_puck', 'af_alloy', 'af_aoede', 'af_bella', 
-            'af_heart', 'af_jessica', 'af_kore', 'af_nova', 'af_river', 
-            'af_sarah', 'af_sky', 'bf_alice', 'bf_emma', 'bf_isabella', 
-            'bf_lily', 'bm_daniel', 'bm_fable', 'bm_george', 'bm_lewis'
+            'am_onyx', 'am_puck', 'af_sky', 'af_heart', 'af_alloy',
+            'af_aoede', 'af_bella', 'af_jessica', 'af_kore', 'af_nova',
+            'af_river', 'af_sarah', 'bf_alice', 'bf_emma', 'bf_isabella', 
+            'bf_lily', 'bm_george', 'bm_lewis', 'bm_daniel', 'bm_fable'
         ]
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
         self.voice_var = tk.StringVar(value='am_michael')
@@ -39,6 +39,13 @@ class TextToSpeechApp:
         self.save_button = ttk.Button(button_frame, text="Save", command=self.save_file, state=tk.DISABLED)
         self.save_button.pack(side=tk.LEFT, padx=5)
         self.text_box.pack(padx=10, pady=10)
+
+        # Bind Ctrl+A to select_all function
+        self.text_box.bind("<Control-a>", self.select_all)
+
+    def select_all(self, event):
+        event.widget.tag_add("sel", "1.0", "end")
+        return "break"
 
     def generate_audio(self):
         text = self.text_box.get("1.0", tk.END).strip()
