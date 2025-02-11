@@ -29,8 +29,9 @@ It also includes features like automatic sentence splitting using `pysbd`, pause
    - Click "Generate" to create the audio.
    - Use the "Play/Stop" button to listen to the generated audio.
    - Save the audio using the "Save" button.
-The  text window has keybound `Ctrl`+`A` for selecting all text, but inserting seems to amend to teh existing text. So delete the old text first.
-This has not been tested on Windows.s
+
+The  text window has keybound `Ctrl`+`A` for selecting all text, but inserting seems to amend to teh existing text. So delete the old text first.<br>
+This has not been tested on Windows.
 
 #### License:
 Do as you wish.
