@@ -10,6 +10,7 @@ class TextToSpeechApp:
         self.root = root
         self.root.title("Text to Speech")
         self.audio_file = None
+        self.is_playing = False
         self.voice_options = [
             'am_adam', 'am_echo', 'am_eric', 'am_liam', 'am_michael', 
             'am_onyx', 'am_puck', 'af_sky', 'af_heart', 'af_alloy',
@@ -34,13 +35,11 @@ class TextToSpeechApp:
         button_frame.pack(pady=5)
         self.generate_button = ttk.Button(button_frame, text="Generate", command=self.generate_audio)
         self.generate_button.pack(side=tk.LEFT, padx=5)
-        self.play_button = ttk.Button(button_frame, text="Play", command=self.play_audio, state=tk.DISABLED)
+        self.play_button = ttk.Button(button_frame, text="Play", command=self.toggle_play_pause, state=tk.DISABLED)
         self.play_button.pack(side=tk.LEFT, padx=5)
         self.save_button = ttk.Button(button_frame, text="Save", command=self.save_file, state=tk.DISABLED)
         self.save_button.pack(side=tk.LEFT, padx=5)
         self.text_box.pack(padx=10, pady=10)
-
-        # Bind Ctrl+A to select_all function
         self.text_box.bind("<Control-a>", self.select_all)
 
     def select_all(self, event):
@@ -57,11 +56,20 @@ class TextToSpeechApp:
         self.play_button.config(state=tk.NORMAL)
         self.save_button.config(state=tk.NORMAL)
 
-    def play_audio(self):
-        if self.audio_file:
+    def toggle_play_pause(self):
+        if not self.is_playing:
             pygame.mixer.init()
             pygame.mixer.music.load(self.audio_file.name)
             pygame.mixer.music.play()
+            self.is_playing = True
+            self.play_button.config(text="Pause")
+        else:
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.pause()
+                self.play_button.config(text="Resume")
+            else:
+                pygame.mixer.music.unpause()
+                self.play_button.config(text="Pause")
 
     def save_file(self):
         if self.audio_file:
