@@ -14,9 +14,9 @@ class TextToSpeechApp:
         self.audio_file = None
         self.is_playing = False
         self.autosplit_var = tk.BooleanVar(value=False)
-        self.voice_options = ['am_michael', 'af_sky', 'am_adam', 'am_eric', 'am_liam', 'bm_george', 'bm_lewis', 'bm_daniel', 'af_heart', 'bf_alice', 'am_onyx', 'af_alloy', 'af_bella', 'af_aoede', 'af_jessica', 'af_sarah', 'af_nova', 'af_river', 'bf_isabella', 'bf_lily', 'bf_emma', 'am_echo', 'af_kore', 'am_puck', 'bm_fable']
+        self.voice_options = ['af_sky', 'am_michael', 'am_adam', 'am_eric', 'am_liam', 'bm_george', 'bm_lewis', 'bm_daniel', 'af_heart', 'bf_alice', 'am_onyx', 'af_alloy', 'af_bella', 'af_aoede', 'af_jessica', 'af_sarah', 'af_nova', 'af_river', 'bf_isabella', 'bf_lily', 'bf_emma', 'am_echo', 'af_kore', 'am_puck', 'bm_fable']
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
-        self.voice_var = tk.StringVar(value='am_michael')
+        self.voice_var = tk.StringVar(value='af_sky')
         self.speed_var = tk.DoubleVar(value=1.0)
         control_frame = ttk.Frame(root)
         control_frame.pack(padx=10, pady=5, fill=tk.X)
@@ -42,7 +42,7 @@ class TextToSpeechApp:
             variable=self.autosplit_var)
         self.autosplit_check.pack(side=tk.LEFT, padx=10)
         self.text_box.pack(padx=10, pady=10)
-        self.hard_area_label = ttk.Label(root, text="The transcription processes each line separately.", foreground="gray")
+        self.hard_area_label = ttk.Label(root, text="Each line gets processed separately. Segment your text accordingly.", foreground="gray")
         self.hard_area_label.pack(padx=10, pady=(0, 10))
         self.text_box.bind("<Control-a>", self.select_all)
         self.is_paused = False
