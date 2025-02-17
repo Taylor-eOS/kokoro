@@ -13,7 +13,7 @@ class TextToSpeechApp:
         self.root.title("Text to Speech")
         self.audio_file = None
         self.is_playing = False
-        self.autosplit_var = tk.BooleanVar(value=False)
+        self.autosplit_var = tk.BooleanVar(value=True)
         self.voice_options = ['af_sky', 'am_michael', 'am_adam', 'am_eric', 'am_liam', 'bm_george', 'bm_lewis', 'bm_daniel', 'af_heart', 'bf_alice', 'am_onyx', 'af_alloy', 'af_bella', 'af_aoede', 'af_jessica', 'af_sarah', 'af_nova', 'af_river', 'bf_isabella', 'bf_lily', 'bf_emma', 'am_echo', 'af_kore', 'am_puck', 'bm_fable']
         self.text_box = scrolledtext.ScrolledText(root, width=60, height=15)
         self.voice_var = tk.StringVar(value='af_sky')
