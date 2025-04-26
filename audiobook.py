@@ -4,6 +4,7 @@ import math
 import pysbd
 from pathlib import Path
 from generate import generate_audio, save_audio
+from pydub import AudioSegment
 
 MAX_CHARS = 4000
 INPUT_FILE = 'input.txt'
@@ -41,8 +42,15 @@ def main():
                 with open(LOG_FILE, "a") as f:
                     f.write(f"Chunk {idx}: {chunk}\n\n")
             else:
+                wav_path = f"chunk_{idx}.wav"
                 audio = generate_audio(chunk)
-                save_audio(audio, f"chunk_{idx}.wav")
+                save_audio(audio, wav_path)
+                mp3_path = f"chunk_{idx}.mp3"
+                AudioSegment.from_wav(wav_path).export(mp3_path, format='mp3')
+                try:
+                    os.remove(wav_path)
+                except FileNotFoundError:
+                    print(f"Error removing wav file: {wav_path}")
             idx += 1
 
 if __name__ == '__main__':
