@@ -85,9 +85,6 @@ class TextToSpeechApp:
         self.play_button.config(text="Play")
         self.is_paused = False
 
-    def toggle_autosplit(self):
-        pass
-
     def toggle_play_pause(self):
         if not pygame.mixer.get_init():
             pygame.mixer.init()
@@ -129,3 +126,4 @@ class TextToSpeechApp:
 root = tk.Tk()
 app = TextToSpeechApp(root)
 root.mainloop()
+

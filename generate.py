@@ -32,3 +32,4 @@ def process_text_to_audio(input_file='input.txt', output_file='output.wav'):
 
 if __name__ == "__main__":
     process_text_to_audio()
+

@@ -11,26 +11,32 @@ INPUT_FILE = 'input.txt'
 LOG_FILE = 'chunks.txt'
 TEST = False
 segmenter = pysbd.Segmenter(language='en', clean=False)
+AUDIOBOOK_VOICE = 'am_eric'
+AUDIOBOOK_SPEED = 1.15
 
 def split_into_chapters(text):
     parts = re.split(r'\n\s*\n+', text.strip())
     return [p.strip() for p in parts if p.strip()]
 
-def split_chapter_sentences(chapter):
-    sentences = [s.strip() for s in segmenter.segment(chapter) if s.strip()]
-    total_chars = sum(len(s) for s in sentences)
-    num_chunks = max(1, min(len(sentences), math.ceil(total_chars / MAX_CHARS)))
-    target = total_chars / num_chunks
-    chunks, current, curr_len = [], [], 0
-    for s in sentences:
-        if curr_len + len(s) > target and len(chunks) < num_chunks - 1:
-            chunks.append(' '.join(current))
-            current, curr_len = [s], len(s)
+def split_chapter_sentences(chap):
+    PARAGRAPH_PLACEHOLDER = "||PARAGRAPH||"
+    paragraph_breaks = re.split(r'(\n{2,})', chap)
+    segmenter = pysbd.Segmenter(language="en", clean=True)
+    elements = []
+    for part in paragraph_breaks:
+        if not part:
+            continue
+        if re.match(r'\n{2,}', part):
+            elements.append(PARAGRAPH_PLACEHOLDER)
         else:
-            current.append(s)
-            curr_len += len(s)
-    chunks.append(' '.join(current))
-    return chunks
+            elements.extend(segmenter.segment(part.strip()))
+    processed = []
+    for el in elements:
+        if el == PARAGRAPH_PLACEHOLDER:
+            processed.append("\n\n")
+        else:
+            processed.append(el + "\n\n")
+    return ["".join(processed).strip()]
 
 def main():
     text = Path(INPUT_FILE).read_text(encoding='utf-8')
@@ -43,7 +49,8 @@ def main():
                     f.write(f"Chunk {idx}: {chunk}\n\n")
             else:
                 wav_path = f"chunk_{idx}.wav"
-                audio = generate_audio(chunk)
+                #audio = generate_audio(chunk)
+                audio = generate_audio(chunk, AUDIOBOOK_VOICE, AUDIOBOOK_SPEED)
                 save_audio(audio, wav_path)
                 mp3_path = f"chunk_{idx}.mp3"
                 AudioSegment.from_wav(wav_path).export(mp3_path, format='mp3')
