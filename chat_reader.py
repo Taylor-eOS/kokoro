@@ -11,7 +11,7 @@ LOG_FILE = 'chunks.txt'
 TEST = False
 USER_VOICE = 'am_eric'
 ASSISTANT_VOICE = 'bf_isabella'
-SPEED = 1.15
+SPEED = 1.12
 PAUSE = 400
 
 segmenter = pysbd.Segmenter(language='en', clean=False)
@@ -53,7 +53,9 @@ def parse_turns(text):
     return turns
 
 def strip_bracketed(text):
-    return re.sub(r'\[.*?\]', '', text)
+    text = re.sub(r'\[.*?\]', '', text)
+    text = text.replace('*', '_')
+    return text
 
 def main():
     text = Path(INPUT_FILE).read_text(encoding='utf-8')
