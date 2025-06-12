@@ -9,8 +9,8 @@ input_file = 'input.txt'
 log_file = 'chunks.txt'
 test_mode_on = False
 segmenter = pysbd.Segmenter(language='en', clean=False)
-speaker_voice = 'am_eric'
-speaker_voice_speed = 1.1
+speaker_voice = 'am_michael'
+speaker_voice_speed = 1.0
 max_sentences_per_audio_file = 120
 
 def split_into_chapters(text):
