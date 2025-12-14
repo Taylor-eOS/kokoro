@@ -11,7 +11,7 @@ LOG_FILE = 'chunks.txt'
 TEST = False
 USER_VOICE = 'am_eric'
 ASSISTANT_VOICE = 'bf_isabella'
-SPEED = 1.12
+SPEED = 1.1
 PAUSE = 400
 
 segmenter = pysbd.Segmenter(language='en', clean=False)
