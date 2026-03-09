@@ -39,23 +39,23 @@ def main():
     print(f"Speaker voice: {speaker_voice}")
     text = Path(input_file).read_text(encoding='utf-8')
     chapters = split_into_chapters(text)
-    idx = 1
-    for chap in chapters:
-        for chunk in split_chapter_sentences(chap):
+    for chap_idx, chap in enumerate(chapters, 1):
+        chunks = split_chapter_sentences(chap)
+        for chunk_idx, chunk in enumerate(chunks, 1):
+            label = f"{chap_idx:02d}-{chunk_idx}"
             if test_mode_on:
                 with open(log_file, "a") as f:
-                    f.write(f"Chunk {idx}: {chunk}\n\n")
+                    f.write(f"Chunk {label}: {chunk}\n\n")
             else:
-                wav_path = f"chunk_{idx}.wav"
+                wav_path = f"chunk_{label}.wav"
                 audio = generate_audio(chunk, speaker_voice, speaker_voice_speed)
                 save_audio(audio, wav_path)
-                mp3_path = f"chunk_{idx}.mp3"
+                mp3_path = f"chunk_{label}.mp3"
                 AudioSegment.from_wav(wav_path).export(mp3_path, format='mp3')
                 try:
                     os.remove(wav_path)
                 except FileNotFoundError:
                     print(f"Error removing wav file: {wav_path}")
-            idx += 1
 
 if __name__ == '__main__':
     try:
