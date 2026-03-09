@@ -37,12 +37,13 @@ def split_chapter_sentences(chap, max_sentences=max_sentences_per_audio_file):
 
 def main():
     print(f"Speaker voice: {speaker_voice}")
+    offset = int(input("Chapter index offset (1 = shift prologue): "))
     text = Path(input_file).read_text(encoding='utf-8')
     chapters = split_into_chapters(text)
     for chap_idx, chap in enumerate(chapters, 1):
         chunks = split_chapter_sentences(chap)
         for chunk_idx, chunk in enumerate(chunks, 1):
-            label = f"{chap_idx:02d}-{chunk_idx}"
+            label = f"{chap_idx - offset:02d}-{chunk_idx}"
             if test_mode_on:
                 with open(log_file, "a") as f:
                     f.write(f"Chunk {label}: {chunk}\n\n")
