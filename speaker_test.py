@@ -20,6 +20,8 @@ group_labels = {
     'bf': 'British Female',
 }
 
+SAMPLE_RATE = 24000
+
 def pick_voice_group():
     print("\nAvailable voice groups:")
     for key, label in group_labels.items():
@@ -39,10 +41,12 @@ def generate_audio(text, speaker_voice='am_michael', voice_speed=speed):
     for i, (gs, ps, audio) in enumerate(generator):
         audio_segments.append(audio)
         print(f"Generated segment {i+1} for {speaker_voice}: {gs}")
+    silence = np.zeros(SAMPLE_RATE, dtype=np.float32)
+    audio_segments.append(silence)
     return np.concatenate(audio_segments)
 
 def save_audio(audio, filename):
-    sf.write(filename, audio, 24000)
+    sf.write(filename, audio, SAMPLE_RATE)
 
 def prepare_output_folder(group):
     folder = f"voices_{group}"
@@ -72,4 +76,3 @@ def process_text_to_audio():
 
 if __name__ == '__main__':
     process_text_to_audio()
-
