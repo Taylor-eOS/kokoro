@@ -20,8 +20,9 @@ def main():
         first_word = chap.split()[0].lower().strip(".,:-") if chap.split() else ""
         is_numeral = first_word.isdigit() or any(first_word.startswith(n) for n in NUMBER_WORDS)
         is_heading = first_word in heading_words or is_numeral
-        warning = f' ⚠ no heading: "{first_word}"' if not is_heading else ""
-        print(f"  Ch {i:>3}: {len(chunks)} chunk(s)  words: {chunk_sizes}{warning}")
+        warning = " ⚠" if not is_heading else ""
+        preview = chap[:20].replace("\n", " ")
+        print(f"Ch {i:>3}: {len(chunks)} chunks, {chunk_sizes}, {preview!r}{warning}")
 
 if __name__ == '__main__':
     main()
