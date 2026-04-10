@@ -10,7 +10,7 @@ input_file = 'input.txt'
 log_file = 'chunks.txt'
 test_mode_on = False
 segmenter = pysbd.Segmenter(language='en', clean=False)
-speaker_voice = 'am_echo' #'am_onyx' #'am_adam' #'af_heart' #'am_michael'
+speaker_voice = 'am_michael'
 speaker_voice_speed = 1.0
 max_sentences_per_audio_file = 140
 
@@ -43,7 +43,8 @@ def main():
     for chap_idx, chap in enumerate(chapters, 1):
         chunks = split_chapter_sentences(chap)
         for chunk_idx, chunk in enumerate(chunks, 1):
-            label = f"{chap_idx - offset:02d}-{chunk_idx}"
+            chapter_number = chap_idx + offset
+            label = f"{chapter_number:02d}-{chunk_idx}"
             if test_mode_on:
                 with open(log_file, "a") as f:
                     f.write(f"Chunk {label}: {chunk}\n\n")
