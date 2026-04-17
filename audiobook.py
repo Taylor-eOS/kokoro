@@ -37,7 +37,7 @@ def split_chapter_sentences(chap, max_sentences=max_sentences_per_audio_file):
 
 def main():
     print(f"Speaker voice: {speaker_voice}")
-    offset = int(input("Chapter index offset (1 = shift prologue): "))
+    offset = int(input("Chapter index offset (1 = shift prologue): ") or 1)
     text = Path(input_file).read_text(encoding='utf-8')
     chapters = split_into_chapters(text)
     for chap_idx, chap in enumerate(chapters, 1):
