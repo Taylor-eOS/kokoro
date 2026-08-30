@@ -3,16 +3,18 @@ import re
 import math
 import pysbd
 from pathlib import Path
-from generate import generate_audio, save_audio
-from pydub import AudioSegment
 
 input_file = 'input.txt'
 log_file = 'chunks.txt'
 test_mode_on = False
 segmenter = pysbd.Segmenter(language='en', clean=False)
-speaker_voice = 'am_michael'
+speaker_voice = 'am_michael' #'bf_isabella' #'af_sky' #'am_adam' #'af_nova' #'af_alloy
 speaker_voice_speed = 1.0
 max_sentences_per_audio_file = 140
+offset = int(input("Chapter index offset (-1 = prologue): ") or 1)
+
+from generate import generate_audio, save_audio
+from pydub import AudioSegment
 
 def split_into_chapters(text):
     parts = re.split(r'\n\s*\n+', text.strip())
@@ -37,7 +39,6 @@ def split_chapter_sentences(chap, max_sentences=max_sentences_per_audio_file):
 
 def main():
     print(f"Speaker voice: {speaker_voice}")
-    offset = int(input("Chapter index offset (1 = shift prologue): ") or 1)
     text = Path(input_file).read_text(encoding='utf-8')
     chapters = split_into_chapters(text)
     for chap_idx, chap in enumerate(chapters, 1):
@@ -65,4 +66,3 @@ if __name__ == '__main__':
     except FileNotFoundError:
         pass
     main()
-
