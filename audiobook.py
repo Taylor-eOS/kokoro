@@ -7,8 +7,11 @@ from pathlib import Path
 input_file = 'input.txt'
 log_file = 'chunks.txt'
 test_mode_on = False
-segmenter = pysbd.Segmenter(language='en', clean=False)
+default_language = 'en'
+default_language = input(f"Speaker language ({default_language}): ") or default_language
+segmenter = pysbd.Segmenter(language=default_language, clean=False)
 speaker_voice = 'am_michael' #'bf_isabella' #'af_sky' #'am_adam' #'af_nova' #'af_alloy
+speaker_voice = input(f"Speaker voice ({speaker_voice}): ") or speaker_voice
 speaker_voice_speed = 1.0
 max_sentences_per_audio_file = 140
 offset = int(input("Chapter index offset (-1 = prologue): ") or 1)
