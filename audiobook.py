@@ -10,14 +10,30 @@ test_mode_on = False
 default_language = 'en'
 default_language = input(f"Speaker language ({default_language}): ") or default_language
 segmenter = pysbd.Segmenter(language=default_language, clean=False)
-speaker_voice = 'am_michael' #'bf_isabella' #'af_sky' #'am_adam' #'af_nova' #'af_alloy
-speaker_voice = input(f"Speaker voice ({speaker_voice}): ") or speaker_voice
+speaker_voices = ['bf_isabella', 'af_heart', 'am_michael', 'af_sky', 'am_adam', 'af_nova', 'af_alloy']
+speaker_voice = speaker_voices[0]
 speaker_voice_speed = 1.0
 max_sentences_per_audio_file = 140
 offset = int(input("Chapter index offset (-1 = prologue): ") or 1)
 
+#load models after startup
 from generate import generate_audio, save_audio
 from pydub import AudioSegment
+
+def select_speaker_voice():
+    for index, voice in enumerate(speaker_voices, 1):
+        print(f"{index}. {voice}")
+    while True:
+        choice = input(f"Speaker voice, number or name ({speaker_voice}): ").strip()
+        if not choice:
+            return speaker_voice
+        if choice.isdigit() and 1 <= int(choice) <= len(speaker_voices):
+            return speaker_voices[int(choice) - 1]
+        if choice in speaker_voices:
+            return choice
+        print("Invalid selection")
+
+speaker_voice = select_speaker_voice()
 
 def split_into_chapters(text):
     parts = re.split(r'\n\s*\n+', text.strip())

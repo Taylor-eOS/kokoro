@@ -3,7 +3,7 @@ import soundfile as sf
 import numpy as np
 
 #Global settings
-VOICE = 'am_michael'
+VOICE = 'af_heart' #'em_alex'
 #us male: am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_puck
 #us female: af_alloy, af_aoede, af_bella, af_heart, af_jessica, af_kore, af_nicole, af_nova, af_river, af_sarah, af_sky 	
 #british: bf_alice, bf_emma, bf_isabella, bf_lily, bm_daniel, bm_fable, bm_george, bm_lewis
